@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+</head>
+<body>
+
+<div class="card">
+    
+    <div class="search">
+        <input type="text" placeholder="Enter City Name" spellcheck="false">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div> <!--end search-->
+
+    <div class="weather">
+        <i class="fa-solid fa-cloud-rain"></i>
+        <h1 class="temp">22°C</h1>
+        <h2 class="city">New York</h2>
+    </div> <!--end weather-->
+
+    <div class="details">
+        <div class="col">
+            <i class="fa-solid fa-sun"></i>
+            <div>
+                <p class="humidity">50%</p>
+                <p>Humidity</p>
+            </div><!--end humidity-->
+        </div><!---end col-->
+
+        <div class="col">
+            <i class="fa-solid fa-wind"></i>
+            <div>
+                <p class="wind">15km/h</p>
+                <p> Wind Speed</p>
+            </div><!--end humidity-->
+        </div> <!--end col-->
+      
+    </div><!--end details-->
+</div><!--end card-->
+
+<script>
+
+const apikey = "ed0ecb249e62df6598e6deff3b31ecb1";
+const apiurl = "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+
+const searchbox = document.querySelector(".search input");
+const searchbtn = document.querySelector(".search button");
+
+async function checkWeather(city){
+    try {
+        const response = await fetch(apiurl + city + `&appid=${apikey}`);
+        if (!response.ok) {
+            throw new Error('City not found');
+        }
+        const data = await response.json();
+    
+        console.log(data);
+        
+        document.querySelector(".city").innerText = data.name;
+        document.querySelector(".temp").innerText = Math.floor(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerText = data.main.humidity + "%";
+        document.querySelector(".wind").innerText = data.wind.speed + "km/h";
+    } catch (error) {
+        alert(error.message);
+    }
+}
+
+searchbtn.addEventListener("click", () => {
+    checkWeather(searchbox.value);
+})
+
+// Initial call with a default city
+checkWeather("New York");
+
+</script>
+</body>
+</html>
